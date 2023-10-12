@@ -1,0 +1,1588 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOhwTcqd+1G2BQtbiaaCJIu",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/jeffersonramelo/Paper-pos-doc/blob/main/R2%20dentro%20e%20fora%20da%20amostra\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "# Caminho para o arquivo XLSX\n",
+        "caminho_arquivo = '/content/dados todos sem escala.xlsx'\n",
+        "\n",
+        "# Lê o arquivo XLSX\n",
+        "dados = pd.read_excel(caminho_arquivo)"
+      ],
+      "metadata": {
+        "id": "DOE1GbH_7pjb"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Supondo que 'dados' seja o seu DataFrame\n",
+        "\n",
+        "# Converter a coluna 't' para o tipo de dado datetime, se ainda não estiver no formato adequado\n",
+        "dados['t'] = pd.to_datetime(dados['t'], format='%Y')\n",
+        "\n",
+        "# Definir as datas de início e fim para o intervalo desejado\n",
+        "data_inicio = pd.to_datetime('2017-01-01')\n",
+        "data_fim = pd.to_datetime('2022-12-31')\n",
+        "\n",
+        "# Filtrar os dados para extrair apenas as linhas no intervalo de 2010 a 2013\n",
+        "dados = dados.query('@data_inicio <= t <= @data_fim')\n",
+        "\n",
+        "# Agora, 'dados_2010_2013' contém apenas as linhas com valores de 't' no intervalo de 2010 a 2013.\n"
+      ],
+      "metadata": {
+        "id": "YQWboq9TRV5K"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dados"
+      ],
+      "metadata": {
+        "id": "CpGcZsbmRepN",
+        "outputId": "104529e4-1d9b-40c5-f378-a836165088a9",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 424
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "        COD          t  VM30Abril2011     PL2010    LL2010     AT2009\n",
+              "1382  EALT4 2017-01-01   1.237500e+05    97996.0   30648.0   244566.0\n",
+              "1383  AESB3 2017-01-01   4.512474e+06  1557690.0  298277.0  4099579.0\n",
+              "1384  AFLT3 2017-01-01   4.983715e+05    44935.0   12517.0    87616.0\n",
+              "1385  AALR3 2017-01-01   1.714960e+06  1219460.0    6652.0  2166312.0\n",
+              "1386  ALPA4 2017-01-01   7.564099e+06  2186390.0  362289.0  3782052.0\n",
+              "...     ...        ...            ...        ...       ...        ...\n",
+              "2849  WHRL4 2022-01-01   6.630416e+06  2176471.0  416715.0  9164610.0\n",
+              "2850  PORT3 2022-01-01   4.390289e+06  2345826.0  327064.0  5724443.0\n",
+              "2851  WLMM4 2022-01-01   7.129722e+05   622011.0  117298.0   668104.0\n",
+              "2852  YDUQ3 2022-01-01   2.358681e+06  2946247.0  -58244.0  9897795.0\n",
+              "2853  ZAMP3 2022-01-01   1.120447e+06  1485188.0  -55786.0  3813408.0\n",
+              "\n",
+              "[1472 rows x 6 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-cda99f41-4a6e-4897-a736-f5e66b52c44a\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>COD</th>\n",
+              "      <th>t</th>\n",
+              "      <th>VM30Abril2011</th>\n",
+              "      <th>PL2010</th>\n",
+              "      <th>LL2010</th>\n",
+              "      <th>AT2009</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>1382</th>\n",
+              "      <td>EALT4</td>\n",
+              "      <td>2017-01-01</td>\n",
+              "      <td>1.237500e+05</td>\n",
+              "      <td>97996.0</td>\n",
+              "      <td>30648.0</td>\n",
+              "      <td>244566.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1383</th>\n",
+              "      <td>AESB3</td>\n",
+              "      <td>2017-01-01</td>\n",
+              "      <td>4.512474e+06</td>\n",
+              "      <td>1557690.0</td>\n",
+              "      <td>298277.0</td>\n",
+              "      <td>4099579.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1384</th>\n",
+              "      <td>AFLT3</td>\n",
+              "      <td>2017-01-01</td>\n",
+              "      <td>4.983715e+05</td>\n",
+              "      <td>44935.0</td>\n",
+              "      <td>12517.0</td>\n",
+              "      <td>87616.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1385</th>\n",
+              "      <td>AALR3</td>\n",
+              "      <td>2017-01-01</td>\n",
+              "      <td>1.714960e+06</td>\n",
+              "      <td>1219460.0</td>\n",
+              "      <td>6652.0</td>\n",
+              "      <td>2166312.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1386</th>\n",
+              "      <td>ALPA4</td>\n",
+              "      <td>2017-01-01</td>\n",
+              "      <td>7.564099e+06</td>\n",
+              "      <td>2186390.0</td>\n",
+              "      <td>362289.0</td>\n",
+              "      <td>3782052.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2849</th>\n",
+              "      <td>WHRL4</td>\n",
+              "      <td>2022-01-01</td>\n",
+              "      <td>6.630416e+06</td>\n",
+              "      <td>2176471.0</td>\n",
+              "      <td>416715.0</td>\n",
+              "      <td>9164610.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2850</th>\n",
+              "      <td>PORT3</td>\n",
+              "      <td>2022-01-01</td>\n",
+              "      <td>4.390289e+06</td>\n",
+              "      <td>2345826.0</td>\n",
+              "      <td>327064.0</td>\n",
+              "      <td>5724443.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2851</th>\n",
+              "      <td>WLMM4</td>\n",
+              "      <td>2022-01-01</td>\n",
+              "      <td>7.129722e+05</td>\n",
+              "      <td>622011.0</td>\n",
+              "      <td>117298.0</td>\n",
+              "      <td>668104.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2852</th>\n",
+              "      <td>YDUQ3</td>\n",
+              "      <td>2022-01-01</td>\n",
+              "      <td>2.358681e+06</td>\n",
+              "      <td>2946247.0</td>\n",
+              "      <td>-58244.0</td>\n",
+              "      <td>9897795.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2853</th>\n",
+              "      <td>ZAMP3</td>\n",
+              "      <td>2022-01-01</td>\n",
+              "      <td>1.120447e+06</td>\n",
+              "      <td>1485188.0</td>\n",
+              "      <td>-55786.0</td>\n",
+              "      <td>3813408.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>1472 rows × 6 columns</p>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-cda99f41-4a6e-4897-a736-f5e66b52c44a')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-cda99f41-4a6e-4897-a736-f5e66b52c44a button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-cda99f41-4a6e-4897-a736-f5e66b52c44a');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-61f260ba-2f3c-4c75-9cf8-dbdc5f5401eb\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-61f260ba-2f3c-4c75-9cf8-dbdc5f5401eb')\"\n",
+              "            title=\"Suggest charts.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-61f260ba-2f3c-4c75-9cf8-dbdc5f5401eb button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 117
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "excluir setor financeiro e empresas com PL negativo, numeros faltante e transformar eventuais caracteres em números"
+      ],
+      "metadata": {
+        "id": "kEKhC6-Wf6ro"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Agora, vamos remover as linhas onde 'd9' seja igual a 1\n",
+        "#dados = dados[dados['d11'] != 1]\n",
+        "# Converte a coluna 'PL2010' para números (float) e remove as linhas onde 'PL2010' seja negativo\n",
+        "dados['PL2010'] = pd.to_numeric(dados['PL2010'], errors='coerce')  # 'coerce' trata strings não numéricas como NaN\n",
+        "dados = dados[dados['PL2010'] > 0]\n",
+        "\n",
+        "# Agora, vamos remover as linhas onde 'VM30Abril11' seja igual a '-'\n",
+        "dados = dados[dados['VM30Abril2011'] != '-']\n",
+        "dados = dados[dados['PL2010'] != '-']\n",
+        "dados = dados[dados['LL2010'] != '-']\n",
+        "dados = dados[dados['AT2009'] != '-']\n",
+        "dados = dados[dados['AT2009'] != '0']\n",
+        "\n",
+        "#transforma as variáveis em números\n",
+        "dados['AT2009'] = pd.to_numeric(dados['AT2009'], errors='coerce')\n",
+        "dados['LL2010'] = pd.to_numeric(dados['LL2010'], errors='coerce')\n",
+        "dados['VM30Abril2011'] = pd.to_numeric(dados['VM30Abril2011'], errors='coerce')\n",
+        "dados['PL2010'] = pd.to_numeric(dados['PL2010'], errors='coerce')\n",
+        "\n",
+        "# Lista de variáveis que você deseja escalonar\n",
+        "variaveis = ['VM30Abril2011', 'PL2010', 'LL2010', 'AT2009']\n",
+        "\n",
+        "# Verifique o tipo de dados de cada coluna\n",
+        "for coluna in variaveis:\n",
+        "    print(f\"Tipo de dados da coluna {coluna}: {dados[coluna].dtype}\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-cQ_iqhOf9H_",
+        "outputId": "7178359f-dfd9-43d4-c8d2-a6112c40a3e9"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Tipo de dados da coluna VM30Abril2011: float64\n",
+            "Tipo de dados da coluna PL2010: float64\n",
+            "Tipo de dados da coluna LL2010: float64\n",
+            "Tipo de dados da coluna AT2009: float64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "ESCALONAMENTO DAS VARIÁVEIS"
+      ],
+      "metadata": {
+        "id": "9GCa_0_0pZBs"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "variaveis = ['VM30Abril2011', 'PL2010', 'LL2010']\n",
+        "\n",
+        "for coluna in variaveis:\n",
+        "    dados[coluna] = dados[coluna] / dados['AT2009']\n"
+      ],
+      "metadata": {
+        "id": "A7MYj6i9h6LO"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "WINSORIZAÇÃO: tratar outliers: A winsorização ao nível de 1% envolve substituir os 1% dos valores mais extremos por valores no limite do intervalo aceitável, ou seja, os 1% menores e os 1% maiores dos valores."
+      ],
+      "metadata": {
+        "id": "95LYGQCnbVVn"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "from scipy.stats import mstats\n",
+        "\n",
+        "# Supondo que seu DataFrame se chame \"dados\"\n",
+        "\n",
+        "# Lista de variáveis para winsorizar\n",
+        "variaveis_winsorizar = ['VM30Abril2011', 'PL2010', 'LL2010', 'AT2009']\n",
+        "\n",
+        "# Converter as colunas para números, tratando não numéricos como NaN\n",
+        "for coluna in variaveis_winsorizar:\n",
+        "    dados[coluna] = pd.to_numeric(dados[coluna], errors='coerce')\n",
+        "\n",
+        "# Aplicar winsorização de 1% nas variáveis\n",
+        "for coluna in variaveis_winsorizar:\n",
+        "    dados[coluna] = mstats.winsorize(dados[coluna], limits=[0.01, 0.01])\n",
+        "\n",
+        "# Agora, as variáveis especificadas foram winsorizadas\n"
+      ],
+      "metadata": {
+        "id": "lOpHHKqnzgzN"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "MQO_SIMPLES"
+      ],
+      "metadata": {
+        "id": "9rBG78W6yny2"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import statsmodels.api as sm\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "from statsmodels.stats.outliers_influence import variance_inflation_factor\n",
+        "from statsmodels.stats.diagnostic import het_white\n",
+        "\n",
+        "# Suponha que 'dados' seja o DataFrame com suas variáveis\n",
+        "\n",
+        "# Defina as variáveis independentes e dependente\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Certifique-se de que os tipos de dados sejam numéricos\n",
+        "X = X.astype(float)\n",
+        "y = y.astype(float)\n",
+        "\n",
+        "# Adicione uma constante ao conjunto de variáveis independentes\n",
+        "X = sm.add_constant(X)\n",
+        "\n",
+        "# Crie o modelo de regressão linear\n",
+        "modelo = sm.OLS(y, X).fit()\n",
+        "\n",
+        "# Visualize os resultados do modelo\n",
+        "print(modelo.summary())\n",
+        "\n",
+        "# Calcule o MedAE\n",
+        "y_pred = modelo.predict(X)\n",
+        "medae = np.median(np.abs(y - y_pred))\n",
+        "\n",
+        "# Calcule o valor médio da variável de resposta\n",
+        "valor_medio_y = np.mean(y)\n",
+        "\n",
+        "# Calcule o MedAE escalado pelo valor (ou preço)\n",
+        "medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "\n",
+        "print(\"Median Absolute Error (MedAE):\", medae)\n",
+        "print(\"MedAE escalado pelo valor (ou preço) em percentagem:\", medae_scaled)\n",
+        "\n",
+        "# Calcular os VIFs (Fator de Inflação da Variância)\n",
+        "def calculate_vif(dataframe):\n",
+        "    vif_data = pd.DataFrame()\n",
+        "    vif_data[\"Variável\"] = dataframe.columns\n",
+        "    vif_data[\"VIF\"] = [variance_inflation_factor(dataframe.values, i) for i in range(dataframe.shape[1])]\n",
+        "    return vif_data\n",
+        "\n",
+        "vif_result = calculate_vif(X.drop(columns=['const']))\n",
+        "print(\"\\nFator de Inflação da Variância (VIF):\")\n",
+        "print(vif_result)\n",
+        "\n",
+        "# Realizar o teste de heterocedasticidade de White\n",
+        "white_test_result = het_white(modelo.resid, X)\n",
+        "print(\"\\nResultado do teste de heterocedasticidade de White:\")\n",
+        "print(\"LM Statistic:\", white_test_result[0])\n",
+        "print(\"LM p-value:\", white_test_result[1])\n",
+        "print(\"F Statistic:\", white_test_result[2])\n",
+        "print(\"F p-value:\", white_test_result[3])\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "A-8twO8YyD_l",
+        "outputId": "2f924264-e5a6-43a9-d337-3031f052d78d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "                            OLS Regression Results                            \n",
+            "==============================================================================\n",
+            "Dep. Variable:          VM30Abril2011   R-squared:                       0.525\n",
+            "Model:                            OLS   Adj. R-squared:                  0.524\n",
+            "Method:                 Least Squares   F-statistic:                     697.6\n",
+            "Date:                Fri, 29 Sep 2023   Prob (F-statistic):          8.01e-205\n",
+            "Time:                        23:52:32   Log-Likelihood:                -3132.2\n",
+            "No. Observations:                1266   AIC:                             6270.\n",
+            "Df Residuals:                    1263   BIC:                             6286.\n",
+            "Df Model:                           2                                         \n",
+            "Covariance Type:            nonrobust                                         \n",
+            "==============================================================================\n",
+            "                 coef    std err          t      P>|t|      [0.025      0.975]\n",
+            "------------------------------------------------------------------------------\n",
+            "const         -1.3902      0.113    -12.304      0.000      -1.612      -1.169\n",
+            "PL2010         4.9779      0.134     37.269      0.000       4.716       5.240\n",
+            "LL2010         2.3955      0.586      4.090      0.000       1.246       3.545\n",
+            "==============================================================================\n",
+            "Omnibus:                     1983.362   Durbin-Watson:                   1.988\n",
+            "Prob(Omnibus):                  0.000   Jarque-Bera (JB):          2474193.972\n",
+            "Skew:                           9.056   Prob(JB):                         0.00\n",
+            "Kurtosis:                     218.815   Cond. No.                         8.54\n",
+            "==============================================================================\n",
+            "\n",
+            "Notes:\n",
+            "[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n",
+            "Median Absolute Error (MedAE): 0.7688983026023597\n",
+            "MedAE escalado pelo valor (ou preço) em percentagem: 56.002583856727306\n",
+            "\n",
+            "Fator de Inflação da Variância (VIF):\n",
+            "  Variável       VIF\n",
+            "0   PL2010  1.048572\n",
+            "1   LL2010  1.048572\n",
+            "\n",
+            "Resultado do teste de heterocedasticidade de White:\n",
+            "LM Statistic: 827.1124590340927\n",
+            "LM p-value: 1.5759828228569135e-176\n",
+            "F Statistic: 474.91058693047364\n",
+            "F p-value: 8.896602843599598e-287\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "MQP - MODELO SIMPLES"
+      ],
+      "metadata": {
+        "id": "IXhYrWVgKtFr"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import statsmodels.api as sm\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "\n",
+        "# Suponha que 'dados' seja o DataFrame com suas variáveis\n",
+        "\n",
+        "# Defina as variáveis independentes e dependente\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Certifique-se de que os tipos de dados sejam numéricos\n",
+        "X = X.astype(float)\n",
+        "y = y.astype(float)\n",
+        "\n",
+        "# Adicione uma constante ao conjunto de variáveis independentes\n",
+        "X = sm.add_constant(X)\n",
+        "\n",
+        "# Crie o modelo de regressão linear robusta usando o método WLS com pesos robustos\n",
+        "modelo_robusto = sm.RLM(y, X, M=sm.robust.norms.HuberT()).fit()\n",
+        "\n",
+        "# Visualize os resultados do modelo robusto\n",
+        "print(modelo_robusto.summary())\n",
+        "\n",
+        "# Calcule o MedAE\n",
+        "y_pred_robusto = modelo_robusto.predict(X)\n",
+        "medae_robusto = np.median(np.abs(y - y_pred_robusto))\n",
+        "\n",
+        "# Calcule o valor médio da variável de resposta\n",
+        "valor_medio_y = np.mean(y)\n",
+        "\n",
+        "# Calcule o MedAE escalado pelo valor (ou preço)\n",
+        "medae_scaled_robusto = (medae_robusto / valor_medio_y) * 100  # Em percentagem\n",
+        "\n",
+        "print(\"Median Absolute Error (MedAE) robusto:\", medae_robusto)\n",
+        "print(\"MedAE robusto escalado pelo valor (ou preço) em percentagem:\", medae_scaled_robusto)\n",
+        "\n",
+        "# Calcular os VIFs (Fator de Inflação da Variância)\n",
+        "def calculate_vif(dataframe):\n",
+        "    vif_data = pd.DataFrame()\n",
+        "    vif_data[\"Variável\"] = dataframe.columns\n",
+        "    vif_data[\"VIF\"] = [variance_inflation_factor(dataframe.values, i) for i in range(dataframe.shape[1])]\n",
+        "    return vif_data\n",
+        "\n",
+        "vif_result = calculate_vif(X)\n",
+        "print(\"\\nFator de Inflação da Variância (VIF):\")\n",
+        "print(vif_result)\n",
+        "\n",
+        "# Calcular o coeficiente de determinação (R-squared)\n",
+        "sst_robusto = ((y - y.mean())**2).sum()\n",
+        "ssr_robusto = ((y - y_pred_robusto)**2).sum()\n",
+        "r_squared_robusto = 1 - (ssr_robusto / sst_robusto)\n",
+        "\n",
+        "print(\"Coeficiente de Determinação (R-squared) do modelo robusto:\", r_squared_robusto)\n",
+        "\n",
+        "# Realizar o teste de heterocedasticidade de White\n",
+        "white_test_result_robusto = het_white(modelo_robusto.resid, X)\n",
+        "print(\"\\nResultado do teste de heterocedasticidade de White para o modelo robusto:\")\n",
+        "print(\"LM Statistic:\", white_test_result_robusto[0])\n",
+        "print(\"LM p-value:\", white_test_result_robusto[1])\n",
+        "print(\"F Statistic:\", white_test_result_robusto[2])\n",
+        "print(\"F p-value:\", white_test_result_robusto[3])\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "I8ELT4MqgBwZ",
+        "outputId": "5fb370be-ede8-4aab-b44d-595856c010e7"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "                    Robust linear Model Regression Results                    \n",
+            "==============================================================================\n",
+            "Dep. Variable:          VM30Abril2011   No. Observations:                 1266\n",
+            "Model:                            RLM   Df Residuals:                     1263\n",
+            "Method:                          IRLS   Df Model:                            2\n",
+            "Norm:                          HuberT                                         \n",
+            "Scale Est.:                       mad                                         \n",
+            "Cov Type:                          H1                                         \n",
+            "Date:                Fri, 29 Sep 2023                                         \n",
+            "Time:                        23:49:43                                         \n",
+            "No. Iterations:                     2                                         \n",
+            "==============================================================================\n",
+            "                 coef    std err          z      P>|z|      [0.025      0.975]\n",
+            "------------------------------------------------------------------------------\n",
+            "const       1.837e+05   8.67e+04      2.118      0.034    1.37e+04    3.54e+05\n",
+            "PL2010         1.6567      0.008    195.103      0.000       1.640       1.673\n",
+            "LL2010         1.9616      0.055     35.657      0.000       1.854       2.069\n",
+            "==============================================================================\n",
+            "\n",
+            "If the model instance has been used for another fit with different fit parameters, then the fit options might not be the correct ones anymore .\n",
+            "Median Absolute Error (MedAE) robusto: 1349873.1196437643\n",
+            "MedAE robusto escalado pelo valor (ou preço) em percentagem: 11.095094337735317\n",
+            "\n",
+            "Fator de Inflação da Variância (VIF):\n",
+            "  Variável       VIF\n",
+            "0    const  1.171573\n",
+            "1   PL2010  2.280638\n",
+            "2   LL2010  2.280638\n",
+            "Coeficiente de Determinação (R-squared) do modelo robusto: 0.7510503088154518\n",
+            "\n",
+            "Resultado do teste de heterocedasticidade de White para o modelo robusto:\n",
+            "LM Statistic: 251.123845952615\n",
+            "LM p-value: 3.7278015028713593e-53\n",
+            "F Statistic: 78.00635784064896\n",
+            "F p-value: 3.6272170967299465e-59\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "REGRESSÃO QUANTÍLICA_SIMPLES (NÃO LINEAR)"
+      ],
+      "metadata": {
+        "id": "fUZVJwTv19EF"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import statsmodels.api as sm\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "\n",
+        "# Defina as variáveis independentes e dependente\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Certifique-se de que os tipos de dados sejam numéricos\n",
+        "X = X.astype(float)\n",
+        "y = y.astype(float)\n",
+        "\n",
+        "# Adicione uma constante ao conjunto de variáveis independentes\n",
+        "X = sm.add_constant(X)\n",
+        "\n",
+        "# Crie o modelo de regressão quantílica\n",
+        "modelo = sm.QuantReg(y, X).fit(q=0.5)  # q=0.5 representa a mediana, ajuste conforme necessário\n",
+        "\n",
+        "# Visualize os resultados do modelo\n",
+        "print(modelo.summary())\n",
+        "# Faça previsões com o modelo quantílico\n",
+        "y_pred_quantreg = modelo.predict(X)\n",
+        "\n",
+        "# Calcule o MedAE para o modelo quantílico\n",
+        "medae_quantreg = np.median(np.abs(y - y_pred_quantreg))\n",
+        "\n",
+        "# Calcule o valor médio da variável de resposta\n",
+        "valor_medio_y = np.mean(y)\n",
+        "\n",
+        "# Calcule o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "medae_scaled_quantreg = (medae_quantreg / valor_medio_y) * 100  # Em percentagem\n",
+        "\n",
+        "print(\"Median Absolute Error (MedAE) quantílico:\", medae_quantreg)\n",
+        "print(\"MedAE quantílico escalado pelo valor (ou preço) em percentagem:\", medae_scaled_quantreg)\n"
+      ],
+      "metadata": {
+        "id": "dgpuCY5p1_I5",
+        "outputId": "1ebc6c5c-eb58-4464-d4d4-5fde34b36b85",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "                         QuantReg Regression Results                          \n",
+            "==============================================================================\n",
+            "Dep. Variable:          VM30Abril2011   Pseudo R-squared:               0.4629\n",
+            "Model:                       QuantReg   Bandwidth:                   8.926e+05\n",
+            "Method:                 Least Squares   Sparsity:                    3.439e+06\n",
+            "Date:                Fri, 29 Sep 2023   No. Observations:                 1266\n",
+            "Time:                        23:50:00   Df Residuals:                     1263\n",
+            "                                        Df Model:                            2\n",
+            "==============================================================================\n",
+            "                 coef    std err          t      P>|t|      [0.025      0.975]\n",
+            "------------------------------------------------------------------------------\n",
+            "const      -1.681e-06   5.23e+04  -3.21e-11      1.000   -1.03e+05    1.03e+05\n",
+            "PL2010         1.4483      0.005    282.753      0.000       1.438       1.458\n",
+            "LL2010         2.4432      0.033     73.627      0.000       2.378       2.508\n",
+            "==============================================================================\n",
+            "\n",
+            "The condition number is large, 1.68e+07. This might indicate that there are\n",
+            "strong multicollinearity or other numerical problems.\n",
+            "Median Absolute Error (MedAE) quantílico: 1165419.1598028336\n",
+            "MedAE quantílico escalado pelo valor (ou preço) em percentagem: 9.579000672618067\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "RB_Simples (LINEAR)"
+      ],
+      "metadata": {
+        "id": "X-hPlPqnNEYC"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.linear_model import BayesianRidge\n",
+        "from sklearn.model_selection import KFold\n",
+        "from sklearn.metrics import median_absolute_error, r2_score\n",
+        "import numpy as np\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Configurar a validação cruzada com 10 folds\n",
+        "kf = KFold(n_splits=10, shuffle=True, random_state=42)\n",
+        "\n",
+        "# Listas para armazenar resultados\n",
+        "medae_scores = []\n",
+        "r2_scores = []\n",
+        "\n",
+        "# Treinar e avaliar o modelo dentro da amostra usando validação cruzada\n",
+        "for train_index, test_index in kf.split(X):\n",
+        "    X_train, X_test = X.iloc[train_index], X.iloc[test_index]\n",
+        "    y_train, y_test = y.iloc[train_index], y.iloc[test_index]\n",
+        "\n",
+        "    # Criar o modelo Bayesian Ridge\n",
+        "    modelo_bayesiano = BayesianRidge()\n",
+        "\n",
+        "    modelo_bayesiano.fit(X_train, y_train)\n",
+        "    y_pred = modelo_bayesiano.predict(X_test)\n",
+        "\n",
+        "    # Calcular o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "    medae = median_absolute_error(y_test, y_pred)\n",
+        "    valor_medio_y = np.mean(y_test)\n",
+        "    medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "    medae_scores.append(medae_scaled)\n",
+        "\n",
+        "    # Calcular o R²\n",
+        "    r2 = r2_score(y_test, y_pred)\n",
+        "    r2_scores.append(r2)\n",
+        "\n",
+        "    # Visualizar os coeficientes do modelo (coeficientes Bayesianos)\n",
+        "    coeficientes = modelo_bayesiano.coef_\n",
+        "    print(\"Coeficientes do Modelo:\", coeficientes)\n",
+        "\n",
+        "# Média do MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "mean_medae_scaled = np.mean(medae_scores)\n",
+        "print(\"Média do MedAE escalado pelo valor (ou preço) em percentagem:\", mean_medae_scaled)\n",
+        "\n",
+        "# Média do R²\n",
+        "mean_r2 = np.mean(r2_scores)\n",
+        "print(\"Média do R²:\", mean_r2)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "c65b3c07-6c51-4d23-e04e-d926a2ae6b15",
+        "id": "zj4mQ3zrNLrh"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Coeficientes do Modelo: [1.61847292 1.68030638]\n",
+            "Coeficientes do Modelo: [1.68936412 2.05581752]\n",
+            "Coeficientes do Modelo: [1.79243834 1.1847947 ]\n",
+            "Coeficientes do Modelo: [1.64642279 1.82221011]\n",
+            "Coeficientes do Modelo: [1.59410037 2.15412886]\n",
+            "Coeficientes do Modelo: [1.76325192 1.34669725]\n",
+            "Coeficientes do Modelo: [1.68443074 1.67153368]\n",
+            "Coeficientes do Modelo: [1.58947171 2.28751832]\n",
+            "Coeficientes do Modelo: [1.63439239 2.21207694]\n",
+            "Coeficientes do Modelo: [1.6291845  2.01305308]\n",
+            "Média do MedAE escalado pelo valor (ou preço) em percentagem: 16.400983329402145\n",
+            "Média do R²: 0.6512373055411931\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "SVR (NÃO LINEAR)"
+      ],
+      "metadata": {
+        "id": "NIw0ZhcK_9OC"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.svm import SVR\n",
+        "from sklearn.model_selection import KFold\n",
+        "from sklearn.metrics import median_absolute_error, r2_score\n",
+        "import numpy as np\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Configurar a validação cruzada com 10 folds\n",
+        "kf = KFold(n_splits=10, shuffle=True, random_state=42)\n",
+        "\n",
+        "# Listas para armazenar resultados\n",
+        "medae_scores = []\n",
+        "r2_scores = []\n",
+        "\n",
+        "# Treinar e avaliar o modelo dentro da amostra usando validação cruzada\n",
+        "for train_index, test_index in kf.split(X):\n",
+        "    X_train, X_test = X.iloc[train_index], X.iloc[test_index]\n",
+        "    y_train, y_test = y.iloc[train_index], y.iloc[test_index]\n",
+        "\n",
+        "    # Criar o modelo SVR com kernel RBF\n",
+        "    #modelo_svr = SVR(kernel='linear', C=1.0)\n",
+        "    modelo_svr = SVR(kernel='poly', degree=3, C=1.0)\n",
+        "    #modelo_svr = SVR(kernel='sigmoid', C=1.0)\n",
+        "    #modelo_svr = SVR(kernel='rbf', C=1.0)\n",
+        "\n",
+        "    modelo_svr.fit(X_train, y_train)\n",
+        "    y_pred = modelo_svr.predict(X_test)\n",
+        "\n",
+        "    # Calcular o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "    medae = median_absolute_error(y_test, y_pred)\n",
+        "    valor_medio_y = np.mean(y_test)\n",
+        "    medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "    medae_scores.append(medae_scaled)\n",
+        "\n",
+        "    # Calcular o R²\n",
+        "    r2 = r2_score(y_test, y_pred)\n",
+        "    r2_scores.append(r2)\n",
+        "\n",
+        "# Média do MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "mean_medae_scaled = np.mean(medae_scores)\n",
+        "print(\"Média do MedAE escalado pelo valor (ou preço) em percentagem:\", mean_medae_scaled)\n",
+        "\n",
+        "# Média do R²\n",
+        "mean_r2 = np.mean(r2_scores)\n",
+        "print(\"Média do R²:\", mean_r2)\n"
+      ],
+      "metadata": {
+        "id": "VPXr6W3_Hh_z",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "aeb873e8-2be5-46f6-fbfd-5245f1c71786"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Média do MedAE escalado pelo valor (ou preço) em percentagem: 23.75966291126486\n",
+            "Média do R²: -0.08672074189113821\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "CART_simples (NÃO LINEAR)"
+      ],
+      "metadata": {
+        "id": "ZYtjgE_9OP3j"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.tree import DecisionTreeRegressor\n",
+        "from sklearn.ensemble import BaggingRegressor\n",
+        "from sklearn.model_selection import KFold\n",
+        "from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n",
+        "import numpy as np\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Configurar a validação cruzada com 10 folds\n",
+        "kf = KFold(n_splits=10, shuffle=True, random_state=42)\n",
+        "\n",
+        "# Listas para armazenar resultados\n",
+        "medae_scores = []\n",
+        "r2_scores = []\n",
+        "\n",
+        "# Treinar e avaliar o modelo dentro da amostra usando validação cruzada\n",
+        "for train_index, test_index in kf.split(X):\n",
+        "    X_train, X_test = X.iloc[train_index], X.iloc[test_index]\n",
+        "    y_train, y_test = y.iloc[train_index], y.iloc[test_index]\n",
+        "\n",
+        "    # Criar o modelo de árvore de decisão com os parâmetros desejados\n",
+        "    modelo_arvore = DecisionTreeRegressor(min_samples_split=5, random_state=42)\n",
+        "    #modelo_arvore = DecisionTreeRegressor(max_depth=5, min_samples_split=5, random_state=42)\n",
+        "\n",
+        "\n",
+        "\n",
+        "    # Criar o modelo Bagging com 500 árvores\n",
+        "    bagging_model = BaggingRegressor(base_estimator=modelo_arvore, n_estimators=500, bootstrap=True, random_state=42)\n",
+        "    #bagging_model = BaggingRegressor(base_estimator=modelo_arvore, n_estimators=100, bootstrap=True, random_state=42)\n",
+        "\n",
+        "\n",
+        "    bagging_model.fit(X_train, y_train)\n",
+        "    y_pred = bagging_model.predict(X_test)\n",
+        "\n",
+        "    # Calcular o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "    medae = np.median(np.abs(y_test - y_pred))\n",
+        "    valor_medio_y = np.mean(y_test)\n",
+        "    medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "    medae_scores.append(medae_scaled)\n",
+        "\n",
+        "    # Calcular o R²\n",
+        "    r2 = r2_score(y_test, y_pred)\n",
+        "    r2_scores.append(r2)\n",
+        "\n",
+        "    # Visualizar a importância dos coeficientes (importância das variáveis)\n",
+        "    importancia_coeficientes = np.mean([tree.feature_importances_ for tree in bagging_model.estimators_], axis=0)\n",
+        "    print(\"Importância dos Coeficientes:\", importancia_coeficientes)\n",
+        "\n",
+        "# Média do MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "mean_medae_scaled = np.mean(medae_scores)\n",
+        "print(\"Média do MedAE escalado pelo valor (ou preço) em percentagem:\", mean_medae_scaled)\n",
+        "\n",
+        "# Média do R²\n",
+        "mean_r2 = np.mean(r2_scores)\n",
+        "print(\"Média do R²:\", mean_r2)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "242689ad-cd4d-4f85-8ba4-cd18fbea4151",
+        "id": "c3TdDSmhOYKa"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.87022492 0.12977508]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.86110859 0.13889141]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.89646042 0.10353958]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.87938542 0.12061458]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.85587776 0.14412224]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.90771571 0.09228429]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.8844549 0.1155451]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.85795786 0.14204214]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.86759527 0.13240473]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/ensemble/_base.py:166: FutureWarning: `base_estimator` was renamed to `estimator` in version 1.2 and will be removed in 1.4.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância dos Coeficientes: [0.87041574 0.12958426]\n",
+            "Média do MedAE escalado pelo valor (ou preço) em percentagem: 14.229078364696914\n",
+            "Média do R²: 0.5720102647025542\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "FLORESTA ALEATÓRIA (NÃO LINEAR)"
+      ],
+      "metadata": {
+        "id": "OZLbiycNZm26"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import RandomForestRegressor\n",
+        "from sklearn.model_selection import KFold\n",
+        "from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n",
+        "import numpy as np\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Certifique-se de que os tipos de dados sejam numéricos\n",
+        "X = X.astype(float)\n",
+        "y = y.astype(float)\n",
+        "\n",
+        "# Configurar a validação cruzada com 10 folds\n",
+        "kf = KFold(n_splits=10, shuffle=True, random_state=42)\n",
+        "\n",
+        "# Listas para armazenar resultados\n",
+        "medae_scores = []\n",
+        "r2_scores = []\n",
+        "\n",
+        "# Treinar e avaliar o modelo dentro da amostra usando validação cruzada\n",
+        "for train_index, test_index in kf.split(X):\n",
+        "    X_train, X_test = X.iloc[train_index], X.iloc[test_index]\n",
+        "    y_train, y_test = y.iloc[train_index], y.iloc[test_index]\n",
+        "\n",
+        "    # Criar o modelo de Floresta Aleatória com os parâmetros desejados\n",
+        "    random_forest_model = RandomForestRegressor(n_estimators=500, random_state=42)\n",
+        "    #random_forest_model = RandomForestRegressor(n_estimators=500, max_depth=10, random_state=42)\n",
+        "    #random_forest_model = RandomForestRegressor(n_estimators=500, max_features=4, random_state=42)\n",
+        "    #random_forest_model = RandomForestRegressor(n_estimators=500, max_features=0.3, random_state=42)\n",
+        "\n",
+        "\n",
+        "    random_forest_model.fit(X_train, y_train)\n",
+        "    y_pred = random_forest_model.predict(X_test)\n",
+        "\n",
+        "    # Calcular o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "    medae = np.median(np.abs(y_test - y_pred))\n",
+        "    valor_medio_y = np.mean(y_test)\n",
+        "    medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "    medae_scores.append(medae_scaled)\n",
+        "\n",
+        "    # Calcular o R²\n",
+        "    r2 = r2_score(y_test, y_pred)\n",
+        "    r2_scores.append(r2)\n",
+        "\n",
+        "    # Visualizar a importância das variáveis\n",
+        "    importancia_variaveis = random_forest_model.feature_importances_\n",
+        "    print(\"Importância das Variáveis:\", importancia_variaveis)\n",
+        "\n",
+        "# Média do MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "mean_medae_scaled = np.mean(medae_scores)\n",
+        "print(\"Média do MedAE escalado pelo valor (ou preço) em percentagem:\", mean_medae_scaled)\n",
+        "\n",
+        "# Média do R²\n",
+        "mean_r2 = np.mean(r2_scores)\n",
+        "print(\"Média do R²:\", mean_r2)\n"
+      ],
+      "metadata": {
+        "id": "lpAmsgS7Zph4",
+        "outputId": "42237292-5243-48d7-d7e6-50c09b7e7c4b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância das Variáveis: [0.85198725 0.14801275]\n",
+            "Importância das Variáveis: [0.84385787 0.15614213]\n",
+            "Importância das Variáveis: [0.88367251 0.11632749]\n",
+            "Importância das Variáveis: [0.86212843 0.13787157]\n",
+            "Importância das Variáveis: [0.83930719 0.16069281]\n",
+            "Importância das Variáveis: [0.88525781 0.11474219]\n",
+            "Importância das Variáveis: [0.86254208 0.13745792]\n",
+            "Importância das Variáveis: [0.8366682 0.1633318]\n",
+            "Importância das Variáveis: [0.84572728 0.15427272]\n",
+            "Importância das Variáveis: [0.85194658 0.14805342]\n",
+            "Média do MedAE escalado pelo valor (ou preço) em percentagem: 14.43210797407156\n",
+            "Média do R²: 0.542486201674424\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "GRADIENT BOOSTING (NÃO LINEAR)"
+      ],
+      "metadata": {
+        "id": "gReIxsDPa_9B"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import GradientBoostingRegressor\n",
+        "from sklearn.model_selection import KFold\n",
+        "from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n",
+        "import numpy as np\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Configurar a validação cruzada com 10 folds\n",
+        "kf = KFold(n_splits=10, shuffle=True, random_state=42)\n",
+        "\n",
+        "# Listas para armazenar resultados\n",
+        "medae_scores = []\n",
+        "r2_scores = []\n",
+        "\n",
+        "# Treinar e avaliar o modelo dentro da amostra usando validação cruzada\n",
+        "for train_index, test_index in kf.split(X):\n",
+        "    X_train, X_test = X.iloc[train_index], X.iloc[test_index]\n",
+        "    y_train, y_test = y.iloc[train_index], y.iloc[test_index]\n",
+        "\n",
+        "    # Criar o modelo de Regressão Gradient Boosting com os parâmetros desejados\n",
+        "    gradient_boosting_model = GradientBoostingRegressor(n_estimators=500, random_state=42)\n",
+        "\n",
+        "    gradient_boosting_model.fit(X_train, y_train)\n",
+        "    y_pred = gradient_boosting_model.predict(X_test)\n",
+        "\n",
+        "    # Calcular o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "    medae = np.median(np.abs(y_test - y_pred))\n",
+        "    valor_medio_y = np.mean(y_test)\n",
+        "    medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "    medae_scores.append(medae_scaled)\n",
+        "\n",
+        "    # Calcular o R²\n",
+        "    r2 = r2_score(y_test, y_pred)\n",
+        "    r2_scores.append(r2)\n",
+        "\n",
+        "    # Visualizar a importância das variáveis\n",
+        "    importancia_variaveis = gradient_boosting_model.feature_importances_\n",
+        "    print(\"Importância das Variáveis:\", importancia_variaveis)\n",
+        "\n",
+        "# Média do MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "mean_medae_scaled = np.mean(medae_scores)\n",
+        "print(\"Média do MedAE escalado pelo valor (ou preço) em percentagem:\", mean_medae_scaled)\n",
+        "\n",
+        "# Média do R²\n",
+        "mean_r2 = np.mean(r2_scores)\n",
+        "print(\"Média do R²:\", mean_r2)\n"
+      ],
+      "metadata": {
+        "id": "NvfZ3qUAbCf5",
+        "outputId": "f9cf1bfb-e093-41c6-bfd4-8710de9ad693",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Importância das Variáveis: [0.85935704 0.14064296]\n",
+            "Importância das Variáveis: [0.81805766 0.18194234]\n",
+            "Importância das Variáveis: [0.8754046 0.1245954]\n",
+            "Importância das Variáveis: [0.85055114 0.14944886]\n",
+            "Importância das Variáveis: [0.83842492 0.16157508]\n",
+            "Importância das Variáveis: [0.89175798 0.10824202]\n",
+            "Importância das Variáveis: [0.86364624 0.13635376]\n",
+            "Importância das Variáveis: [0.83163422 0.16836578]\n",
+            "Importância das Variáveis: [0.84431224 0.15568776]\n",
+            "Importância das Variáveis: [0.84499112 0.15500888]\n",
+            "Média do MedAE escalado pelo valor (ou preço) em percentagem: 12.699941787318881\n",
+            "Média do R²: 0.351145473964532\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "REDES NEURAIS (NÃO LINEAR)"
+      ],
+      "metadata": {
+        "id": "Gy8Aqujjc2rw"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.neural_network import MLPRegressor\n",
+        "from sklearn.model_selection import KFold\n",
+        "from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n",
+        "import numpy as np\n",
+        "\n",
+        "# Supondo que 'dados' seja o DataFrame com suas variáveis\n",
+        "X = dados[['PL2010', 'LL2010']]\n",
+        "y = dados['VM30Abril2011']\n",
+        "\n",
+        "# Configurar a validação cruzada com 10 folds\n",
+        "kf = KFold(n_splits=10, shuffle=True, random_state=42)\n",
+        "\n",
+        "# Listas para armazenar resultados\n",
+        "medae_scores = []\n",
+        "r2_scores = []\n",
+        "\n",
+        "# Treinar e avaliar o modelo dentro da amostra usando validação cruzada\n",
+        "for train_index, test_index in kf.split(X):\n",
+        "    X_train, X_test = X.iloc[train_index], X.iloc[test_index]\n",
+        "    y_train, y_test = y.iloc[train_index], y.iloc[test_index]\n",
+        "\n",
+        "    # Criar o modelo de regressão de rede neural com os parâmetros desejados\n",
+        "    modelo_rede_neural = MLPRegressor(hidden_layer_sizes=(30), max_iter=1000, random_state=42)\n",
+        "\n",
+        "    modelo_rede_neural.fit(X_train, y_train)\n",
+        "    y_pred = modelo_rede_neural.predict(X_test)\n",
+        "\n",
+        "    # Calcular o MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "    medae = np.median(np.abs(y_test - y_pred))\n",
+        "    valor_medio_y = np.mean(y_test)\n",
+        "    medae_scaled = (medae / valor_medio_y) * 100  # Em percentagem\n",
+        "    medae_scores.append(medae_scaled)\n",
+        "\n",
+        "    # Calcular o R²\n",
+        "    r2 = r2_score(y_test, y_pred)\n",
+        "    r2_scores.append(r2)\n",
+        "\n",
+        "# Média do MedAE escalado pelo valor (ou preço) em percentagem\n",
+        "mean_medae_scaled = np.mean(medae_scores)\n",
+        "print(\"Média do MedAE escalado pelo valor (ou preço) em percentagem:\", mean_medae_scaled)\n",
+        "\n",
+        "# Média do R²\n",
+        "mean_r2 = np.mean(r2_scores)\n",
+        "print(\"Média do R²:\", mean_r2)\n"
+      ],
+      "metadata": {
+        "id": "yygOLB39c4OY",
+        "outputId": "840bf438-2246-426a-d514-75584846e965",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/neural_network/_multilayer_perceptron.py:686: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (1000) reached and the optimization hasn't converged yet.\n",
+            "  warnings.warn(\n",
+            "/usr/local/lib/python3.10/dist-packages/sklearn/neural_network/_multilayer_perceptron.py:686: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (1000) reached and the optimization hasn't converged yet.\n",
+            "  warnings.warn(\n",
+            "/usr/local/lib/python3.10/dist-packages/sklearn/neural_network/_multilayer_perceptron.py:686: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (1000) reached and the optimization hasn't converged yet.\n",
+            "  warnings.warn(\n",
+            "/usr/local/lib/python3.10/dist-packages/sklearn/neural_network/_multilayer_perceptron.py:686: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (1000) reached and the optimization hasn't converged yet.\n",
+            "  warnings.warn(\n",
+            "/usr/local/lib/python3.10/dist-packages/sklearn/neural_network/_multilayer_perceptron.py:686: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (1000) reached and the optimization hasn't converged yet.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Média do MedAE escalado pelo valor (ou preço) em percentagem: 11.691986211955475\n",
+            "Média do R²: 0.6298537572510516\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
